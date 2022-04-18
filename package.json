@@ -16,6 +16,7 @@
     "@emotion/styled": "latest",
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
+    "axios": "^0.26.1",
     "next": "latest",
     "prop-types": "latest",
     "react": "latest",
