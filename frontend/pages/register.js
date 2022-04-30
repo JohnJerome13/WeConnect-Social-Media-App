@@ -16,7 +16,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { register, reset } from '../src/features/auth/authSlice';
-import Spinner from '../src/components/spinner';
+import Spinner from '../components/Spinner';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
@@ -71,7 +71,7 @@ export default function Register() {
     }
 
     dispatch(reset());
-  }, [user, isError, isSuccess, message, dispatch]);
+  }, [user, isError, isSuccess, message, router, dispatch]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.currentTarget;
@@ -212,7 +212,7 @@ export default function Register() {
             </Button>
             <Grid container justifyContent='flex-end'>
               <Grid item>
-                <Link href='/' variant='body2'>
+                <Link href='/login' variant='body2'>
                   Already have an account? Sign in
                 </Link>
               </Grid>

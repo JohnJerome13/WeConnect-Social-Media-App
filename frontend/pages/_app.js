@@ -1,12 +1,11 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider } from '@emotion/react';
 import theme from '../src/theme';
 import createEmotionCache from '../src/createEmotionCache';
-import Header from '../src/components/header'
 import { useRouter } from 'next/router';
 
 
@@ -19,9 +18,29 @@ import '../pages/css/index.css';
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
+const themeLight = createTheme({
+  palette: {
+    background: {
+      default: "#f2f2f2"
+    }
+  }
+});
+
+const themeDark = createTheme({
+  palette: {
+    background: {
+      default: "#222222"
+    },
+    text: {
+      primary: "#ffffff"
+    }
+  }
+});
+
 export default function MyApp(props) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-  const router = useRouter();
+  const [light, setLight] = React.useState(true);
+
 
 
   return (
@@ -30,16 +49,10 @@ export default function MyApp(props) {
         <Head>
           <meta name="viewport" content="initial-scale=1, width=device-width" />
         </Head>
-        {
-          (router.pathname !== "/" && 
-          router.pathname !== "/register") && 
-          <Header />
-        }
-        
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={light ? themeLight : themeDark}>
           {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
           <CssBaseline />
-          <Component {...pageProps} />
+          <Component {...pageProps}/>
         </ThemeProvider>
       </CacheProvider>
       <ToastContainer />

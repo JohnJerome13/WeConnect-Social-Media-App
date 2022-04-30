@@ -72,7 +72,7 @@ export default function SignInSide() {
     }
 
     dispatch(reset());
-  }, [user, isError, isSuccess, message, router, dispatch]);
+  }, [user, isError, isSuccess, message, dispatch]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.currentTarget;
