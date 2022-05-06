@@ -16,16 +16,6 @@ export default function Home() {
 		(state) => state.posts
 	);
 
-	if (process.browser) {
-		const cookieChecked = getCookie('token');
-		if (cookieChecked) {
-			if (localStorage.getItem('user')) {
-				user = JSON.parse(localStorage.getItem('user'));
-				return user;
-			}
-		}
-	}
-
 	useEffect(() => {
 		if (isError) {
 			console.log(message);
@@ -42,9 +32,9 @@ export default function Home() {
 		};
 	}, [user, router, isError, message, dispatch]);
 
-	// if (isLoading) {
-	// 	return <Spinner />;
-	// }
+	if (isLoading) {
+		return <Spinner />;
+	}
 
 	return (
 		<Layout>

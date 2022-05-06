@@ -8,6 +8,7 @@ if (typeof window !== 'undefined') {
     user = JSON.parse(localStorage.getItem('user'))
 }
 
+
 const initialState = {
     user: user ? user : null,
     isError: false,
