@@ -63,11 +63,13 @@ export default function PostItem({ post }) {
 						{post.text}
 					</Typography>
 				</CardContent>
-				<CardMedia
-					component='img'
-					image='https://source.unsplash.com/random'
-					alt='Paella dish'
-				/>
+				{post.photo && (
+					<CardMedia
+						component='img'
+						image={`/uploads/${post.photo}`}
+						alt={post.photo}
+					/>
+				)}
 				<CardActions disableSpacing>
 					<IconButton aria-label='add to favorites'>
 						<FavoriteIcon />

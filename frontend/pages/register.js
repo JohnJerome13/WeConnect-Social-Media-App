@@ -83,11 +83,6 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
 
     if (password !== confirmPassword) {
       toast.error('Passwords do not match!');

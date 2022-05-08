@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+
 const {
   getPosts,
   setPost,
@@ -8,8 +9,9 @@ const {
 } = require('../controllers/postController')
 
 const { protect } = require('../middleware/authMiddleware')
+const { upload } = require('../middleware/uploadMiddleware')
 
-router.route('/').get(protect, getPosts).post(protect, setPost)
+router.route('/').get(protect, getPosts).post(protect, upload.single('photo'), setPost)
 router.route('/:id').delete(protect, deletePost).put(protect, updatePost)
 
 module.exports = router
