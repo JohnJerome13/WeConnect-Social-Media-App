@@ -16,10 +16,10 @@ import ImageListItem from '@mui/material/ImageListItem';
 import ImageListItemBar from '@mui/material/ImageListItemBar';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useState, useEffect } from 'react';
-import { createPost } from '../src/features/posts/postSlice';
+import { createPost } from '../../src/features/posts/postSlice';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 export default function PostForm() {
@@ -62,12 +62,12 @@ export default function PostForm() {
 		setPostFormData({ ...postFormData, photo: e.target.files[0] });
 	};
 
-	const handleChangePreview = () => {
+	const handlePhotoPreview = () => {
 		setPostFormData({ ...postFormData, photo: '' });
 		setPhotoPreview(null);
 	};
 
-	const onSubmit = (e) => {
+	const onFormSubmit = (e) => {
 		e.preventDefault();
 
 		if (!text) {
@@ -97,7 +97,7 @@ export default function PostForm() {
 					margin: 'auto',
 				}}
 				component='form'
-				onSubmit={onSubmit}
+				onSubmit={onFormSubmit}
 				encType='multipart/form-data'
 				noValidate
 			>
@@ -111,12 +111,7 @@ export default function PostForm() {
 				<Divider variant='middle' />
 				<CardHeader
 					avatar={
-						<Avatar
-							sx={{ bgcolor: red[500], width: 56, height: 56 }}
-							aria-label='recipe'
-						>
-							R
-						</Avatar>
+						<Avatar sx={{ bgcolor: red[500], width: 56, height: 56 }}>R</Avatar>
 					}
 					title={
 						<TextField
@@ -125,17 +120,16 @@ export default function PostForm() {
 							label='Write something here...'
 							multiline
 							variant='standard'
+							rows={5}
 							onChange={handleInputChange}
 							value={text}
 							fullWidth
 						/>
 					}
 				/>
-
 				{photo && (
 					<ImageList
 						sx={{
-							// Promote the list into its own layer in Chrome. This costs memory, but helps keeping high FPS.
 							p: 3,
 							width: '100%',
 							height: '100%',
@@ -160,7 +154,7 @@ export default function PostForm() {
 									<IconButton
 										sx={{ color: 'white', p: 2 }}
 										aria-label={`cancel`}
-										onClick={handleChangePreview}
+										onClick={handlePhotoPreview}
 									>
 										<CancelIcon />
 									</IconButton>
@@ -174,18 +168,14 @@ export default function PostForm() {
 					sx={{
 						display: 'flex',
 						justifyContent: 'flex-end',
-						p: 1,
 						m: 1,
-						bgcolor: 'background.paper',
-						borderRadius: 1,
 					}}
-					disableSpacing
 				>
 					<Stack spacing={2} direction='row'>
-						<label htmlFor='contained-button-file'>
+						<label htmlFor='photo-image'>
 							<Input
 								accept='image/*'
-								id='contained-button-file'
+								id='photo-image'
 								type='file'
 								name='photo'
 								onChange={handlePhoto}

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -15,6 +16,15 @@ import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Grid from '@mui/material/Grid';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import EditPostForm from './EditPostForm';
+import { useDispatch } from 'react-redux';
+import DeleteDialog from '../alert-box/DeleteDialog';
 
 const ExpandMore = styled((props) => {
 	const { expand, ...other } = props;
@@ -28,10 +38,67 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function PostItem({ post }) {
+	const dispatch = useDispatch();
+
+	const [deleteDialog, setdeleteDialog] = React.useState(false);
+
+	var date = new Date(post.createdAt);
+
+	const month = date.toLocaleString('default', { month: 'long' });
+
+	var newdate = `${month}  ${date.getDate()}, ${date.getFullYear()}`;
+
 	const [expanded, setExpanded] = React.useState(false);
+
+	const [editPostForm, setEditPostForm] = React.useState(false);
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
+	};
+
+	const [anchorEl, setAnchorEl] = React.useState(null);
+
+	const openOptions = Boolean(anchorEl);
+
+	const handleClickOptions = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleCloseOptions = () => {
+		setAnchorEl(null);
+	};
+
+	const toggleEditPostModal = () => {
+		setEditPostForm((prevData) => !prevData);
+	};
+
+	const handleDeleteDialog = () => {
+		setdeleteDialog((prevData) => !prevData);
+	};
+
+	const ReadMore = ({ children }) => {
+		const text = children;
+		const [isReadMore, setIsReadMore] = useState(true);
+		const toggleReadMore = () => {
+			setIsReadMore(!isReadMore);
+		};
+		return (
+			<Typography
+				variant='body2'
+				color='text.secondary'
+				sx={{ whiteSpace: 'pre-line' }}
+			>
+				{isReadMore ? text.slice(0, 40) : text}
+				<br />
+				<span
+					onClick={toggleReadMore}
+					className='read-or-hide'
+					style={{ color: '#1976d2', cursor: 'pointer' }}
+				>
+					{isReadMore && text.length > 40 ? '...read more' : ''}
+				</span>
+			</Typography>
+		);
 	};
 
 	return (
@@ -46,22 +113,67 @@ export default function PostItem({ post }) {
 			>
 				<CardHeader
 					avatar={
-						<Avatar sx={{ bgcolor: red[500] }} aria-label='recipe'>
+						<Avatar sx={{ bgcolor: red[500] }} aria-label='avatar'>
 							R
 						</Avatar>
 					}
 					action={
-						<IconButton aria-label='settings'>
-							<MoreVertIcon />
-						</IconButton>
+						<>
+							<IconButton
+								aria-label='more'
+								id='long-button'
+								aria-controls={openOptions ? 'long-menu' : undefined}
+								aria-expanded={openOptions ? 'true' : undefined}
+								aria-haspopup='true'
+								onClick={handleClickOptions}
+							>
+								<MoreVertIcon />
+							</IconButton>
+							<Menu
+								id='long-menu'
+								MenuListProps={{
+									'aria-labelledby': 'menu-button',
+								}}
+								anchorEl={anchorEl}
+								open={openOptions}
+								onClose={handleCloseOptions}
+								PaperProps={{
+									style: {
+										width: '20ch',
+									},
+								}}
+							>
+								<MenuItem onClick={toggleEditPostModal}>
+									<ListItemIcon>
+										<EditIcon fontSize='small' />
+									</ListItemIcon>
+									<ListItemText>Edit</ListItemText>
+								</MenuItem>
+								<EditPostForm
+									key={post._id}
+									editPostForm={editPostForm}
+									toggleEditPostModal={toggleEditPostModal}
+									postData={post}
+								/>
+								<MenuItem onClick={handleDeleteDialog}>
+									<ListItemIcon>
+										<DeleteIcon fontSize='small' />
+									</ListItemIcon>
+									<ListItemText>Delete</ListItemText>
+								</MenuItem>
+								<DeleteDialog
+									deleteDialog={deleteDialog}
+									postData={post}
+									handleDeleteDialog={handleDeleteDialog}
+								/>
+							</Menu>
+						</>
 					}
 					title='Shrimp and Chorizo Paella'
-					subheader='September 14, 2016'
+					subheader={newdate}
 				/>
 				<CardContent>
-					<Typography variant='body2' color='text.secondary'>
-						{post.text}
-					</Typography>
+					<ReadMore>{post.text}</ReadMore>
 				</CardContent>
 				{post.photo && (
 					<CardMedia

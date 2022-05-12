@@ -12,6 +12,6 @@ const { protect } = require('../middleware/authMiddleware')
 const { upload } = require('../middleware/uploadMiddleware')
 
 router.route('/').get(protect, getPosts).post(protect, upload.single('photo'), setPost)
-router.route('/:id').delete(protect, deletePost).put(protect, updatePost)
+router.route('/:id').delete(protect, deletePost).put(protect, upload.single('photo'), updatePost)
 
 module.exports = router
