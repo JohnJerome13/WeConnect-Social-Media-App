@@ -14,6 +14,9 @@ const userSchema = mongoose.Schema(
             type: String,
             required: [true, 'Please add a password'],
         },
+        settings: {
+            isDarkMode: { type: Boolean  },
+        },
     },
     {
         timestamps: true,

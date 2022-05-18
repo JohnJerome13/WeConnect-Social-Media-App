@@ -60,6 +60,7 @@ const loginUser = asyncHandler(async (req, res) => {
             _id: user.id,
             name: user.name,
             email: user.email,
+            settings: user.settings,
             token: generateToken(user.id)
         })
 
@@ -76,32 +77,40 @@ const getMe = asyncHandler(async (req, res) => {
     res.status(200).json(req.user)
 })
 
-// // @desc    Delete user
-// // @route   DELETE /api/user/:id
-// // @access  Private
-// const deleteUser = asyncHandler(async (req, res) => {
-
-//     const user = await User.findById(req.params.id)
-
-//     if(!user) {
-//         res.status(400)
-//         throw new Error('User not found')
-//     }
-
-//     await User.remove()
-
-//     res.status(200).json({ id: req.params.id })
-// })
-
 // Generate JWT
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
         expiresIn: '30d'
     })
 }
+
+// @desc    Update user settings
+// @route   GET /api/users/settings
+// @access  Private
+const userSettings = asyncHandler(async (req, res) => {
+    const { isDarkMode } = req.body
+
+    // Check for user
+    if (!req.user) {
+      res.status(401)
+      throw new Error('User not found')
+    }
+  
+    const updatedUserSettings = await User.findByIdAndUpdate(req.user._id, {
+        $set: {
+          settings: { isDarkMode: isDarkMode },
+        }
+     }, {
+      new: true,
+    })
+    res.status(200).json(updatedUserSettings)
+
+})
+
 module.exports = {
     registerUser,
     loginUser,
     getMe,
+    userSettings,
 }
 

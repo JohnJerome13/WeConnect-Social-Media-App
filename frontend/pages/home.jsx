@@ -23,15 +23,15 @@ export default function Home() {
 			console.log(message);
 		}
 
-		if (!user) {
+		if (user) {
+			dispatch(getPosts());
+
+			return () => {
+				dispatch(reset());
+			};
+		} else {
 			router.push('/');
 		}
-
-		dispatch(getPosts());
-
-		return () => {
-			dispatch(reset());
-		};
 	}, [user, router, isError, message, dispatch]);
 
 	if (isLoading) {
