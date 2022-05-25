@@ -1,12 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './authService'
 
-var user = {
-    _id: '',
-    settings: { 
-        isDarkMode: false
-    }
-}
+var user 
 
 if (typeof window !== 'undefined') {
     // Perform localStorage action

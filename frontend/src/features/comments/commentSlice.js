@@ -1,21 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import postService from './postService'
+import commentService from './commentService'
 
 const initialState = {
-  posts: [],
+  comments: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: '',
 }
 
-// Create new post
-export const createPost = createAsyncThunk(
-  'posts/create',
-  async (postData, thunkAPI) => {
+// Create new comment
+export const createComment = createAsyncThunk(
+  'comments/create',
+  async (commentData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await postService.createPost(postData, token)
+      return await commentService.createComment(commentData, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -28,13 +28,13 @@ export const createPost = createAsyncThunk(
   }
 )
 
-// Get user posts
-export const getPosts = createAsyncThunk(
-  'posts/getAll',
+// Get user comments
+export const getComments = createAsyncThunk(
+  'comments/getAll',
   async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await postService.getPosts(token)
+      return await commentService.getComments(token)
     } catch (error) {
       const message =
         (error.response &&
@@ -47,13 +47,13 @@ export const getPosts = createAsyncThunk(
   }
 )
 
-// Update post
-export const updatePost = createAsyncThunk(
-  'posts/update',
-  async (postData, thunkAPI) => {
+// Update comment
+export const updateComment = createAsyncThunk(
+  'comments/update',
+  async (commentData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await postService.updatePost(postData.postId, postData.formData, token)
+      return await commentService.updateComment(commentData.commentId, commentData.commentFormData, token)
     } catch (error) {
         const message =
         (error.response &&
@@ -66,13 +66,13 @@ export const updatePost = createAsyncThunk(
   }
 )
 
-// Delete user post
-export const deletePost = createAsyncThunk(
-  'posts/delete',
-  async (postData, thunkAPI) => {
+// Delete user comment
+export const deleteComment = createAsyncThunk(
+  'comments/delete',
+  async (commentId, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token
-      return await postService.deletePost(postData.postId, postData.postPhoto, token)
+      return await commentService.deleteComment(commentId, token)
     } catch (error) {
       const message =
         (error.response &&
@@ -85,77 +85,76 @@ export const deletePost = createAsyncThunk(
   }
 )
 
-export const postSlice = createSlice({
-  name: 'post',
+export const commentSlice = createSlice({
+  name: 'comment',
   initialState,
   reducers: {
     reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createPost.pending, (state) => {
+      .addCase(createComment.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(createPost.fulfilled, (state, action) => {
+      .addCase(createComment.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.posts.push(action.payload)
+        state.comments.push(action.payload)
+      
       })
-      .addCase(createPost.rejected, (state, action) => {
+      .addCase(createComment.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
       })
-      .addCase(getPosts.pending, (state) => {
+      .addCase(getComments.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(getPosts.fulfilled, (state, action) => {
+      .addCase(getComments.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.posts = action.payload
+        state.comments = action.payload
       })
-      .addCase(getPosts.rejected, (state, action) => {
+      .addCase(getComments.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
       })
-      .addCase(updatePost.pending, (state) => {
+      .addCase(updateComment.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(updatePost.fulfilled, (state, action) => {
+      .addCase(updateComment.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.posts = state.posts.map((post) => {
-            if (post._id === action.payload._id) {
-              post.text = action.payload.text;
-              post.photo = action.payload.photo;
+        state.comments = state.comments.map((comment) => {
+            if (comment._id === action.payload._id) {
+              comment.comment = action.payload.comment;
             }
-            return post;
+            return comment;
         })
       })
-      .addCase(updatePost.rejected, (state, action) => {
+      .addCase(updateComment.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
       })
-      .addCase(deletePost.pending, (state) => {
+      .addCase(deleteComment.pending, (state) => {
         state.isLoading = true
       })
-      .addCase(deletePost.fulfilled, (state, action) => {
+      .addCase(deleteComment.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.posts = state.posts.filter(
-          (post) => post._id !== action.payload.id
+        state.comments = state.comments.filter(
+          (comment) => comment._id !== action.payload.id
         )
       })
-      .addCase(deletePost.rejected, (state, action) => {
+      .addCase(deleteComment.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload
       })
-      
   },
 })
 
-export const { reset } = postSlice.actions
-export default postSlice.reducer
+export const { reset } = commentSlice.actions
+export default commentSlice.reducer

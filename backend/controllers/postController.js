@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler')
 const Post = require('../models/postModel')
+const Comment = require('../models/commentModel')
 const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp')
 const fs = require("fs")
@@ -102,6 +103,8 @@ const updatePost = asyncHandler(async (req, res) => {
 const deletePost = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id)
 
+  await Comment.deleteMany({ postId: req.params.id  });
+ 
   if (!post) {
     res.status(400)
     throw new Error('Post not found')
