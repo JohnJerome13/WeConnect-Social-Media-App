@@ -55,11 +55,25 @@ const deletePost = async (postId, postPhoto, token) => {
   return response.data
 }
 
+// Like post
+const likePost = async (postId, postData, token) => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+  const response = await axios.put(API_URL + postId + '/likes', postData, config)
+
+  return response.data
+}
+
 const postService = {
   createPost,
   getPosts,
   updatePost,
   deletePost,
+  likePost,
 }
 
 export default postService

@@ -15,6 +15,9 @@ const commentSchema = mongoose.Schema(
             type: String,
             required: [true, 'Please add a text'],
         },
+        likes: {
+            userId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+        },
     },
     {
         timestamps: true,

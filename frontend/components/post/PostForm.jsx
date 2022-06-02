@@ -19,11 +19,19 @@ import { useState, useEffect } from 'react';
 import { createPost } from '../../src/features/posts/postSlice';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
-import { useDispatch } from 'react-redux';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import CardContent from '@mui/material/CardContent';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 export default function PostForm() {
 	const dispatch = useDispatch();
+	const { user } = useSelector((state) => state.auth);
+
+	const { firstName, lastName } = user;
 
 	const Input = styled('input')({
 		display: 'none',
@@ -32,9 +40,10 @@ export default function PostForm() {
 	const [postFormData, setPostFormData] = useState({
 		text: '',
 		photo: '',
+		audience: 'Friends',
 	});
 
-	const { text, photo } = postFormData;
+	const { text, photo, audience } = postFormData;
 
 	const [photoPreview, setPhotoPreview] = useState();
 
@@ -67,21 +76,32 @@ export default function PostForm() {
 		setPhotoPreview(null);
 	};
 
+	const handleAudienceChange = (event) => {
+		setPostFormData((prevData) => ({
+			...prevData,
+			audience: event.target.value,
+		}));
+	};
+
 	const onFormSubmit = (e) => {
 		e.preventDefault();
 
 		if (!text) {
 			toast.error('Please enter a text.');
+		} else if (!audience) {
+			toast.error('Please select an audience.');
 		} else {
 			const formData = new FormData();
 			formData.append('text', text);
 			formData.append('photo', photo);
+			formData.append('audience', audience);
 
 			dispatch(createPost(formData));
 
 			setPostFormData({
 				text: '',
 				photo: '',
+				audience: 'Friends',
 			});
 			setPhotoPreview(null);
 		}
@@ -111,22 +131,45 @@ export default function PostForm() {
 				<Divider variant='middle' />
 				<CardHeader
 					avatar={
-						<Avatar sx={{ bgcolor: red[500], width: 56, height: 56 }}>R</Avatar>
+						<Avatar sx={{ bgcolor: red[500], width: 50, height: 50 }}>R</Avatar>
 					}
-					title={
-						<TextField
-							id='text'
-							name='text'
-							label='Write something here...'
-							multiline
+					title={`${firstName} ${lastName}`}
+					action={
+						<FormControl
 							variant='standard'
-							rows={5}
-							onChange={handleInputChange}
-							value={text}
-							fullWidth
-						/>
+							sx={{ minWidth: 90, mr: 1 }}
+							size='small'
+						>
+							<InputLabel id='demo-select-small'>Audience</InputLabel>
+							<Select
+								labelId='demo-select-small'
+								id='demo-select-small'
+								value={audience}
+								label='Audience'
+								onChange={handleAudienceChange}
+							>
+								<MenuItem value='Friends' select='true'>
+									Friends
+								</MenuItem>
+								<MenuItem value='Public'>Public</MenuItem>
+							</Select>
+						</FormControl>
 					}
+					sx={{ pb: 0 }}
 				/>
+				<CardContent>
+					<TextField
+						id='text'
+						name='text'
+						multiline
+						variant='standard'
+						rows={4}
+						onChange={handleInputChange}
+						value={text}
+						label='Write something here...'
+						fullWidth
+					/>
+				</CardContent>
 				{photo && (
 					<ImageList
 						sx={{

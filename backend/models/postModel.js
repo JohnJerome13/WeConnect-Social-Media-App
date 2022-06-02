@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const { object } = require('sharp/lib/is')
 const postSchema = mongoose.Schema(
     {
         user: {
@@ -12,6 +13,13 @@ const postSchema = mongoose.Schema(
         },
         photo: {
             type: String,
+        },
+        audience: {
+            type: String,
+            required: [true, 'Please add audience'],
+        },
+        likes: {
+            userId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
         },
     },
     {

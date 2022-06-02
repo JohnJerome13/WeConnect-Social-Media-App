@@ -1,6 +1,6 @@
 import Layout from '../components/Layout';
 import PostForm from '../components/post/PostForm';
-import PostItem from '../components/post/PostItem';
+import PostList from '../components/post/PostList';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
@@ -34,9 +34,9 @@ export default function Home() {
 		}
 	}, [user, router, isError, message, dispatch]);
 
-	if (isLoading) {
-		return <Spinner />;
-	}
+	// if (isLoading) {
+	// 	return <Spinner />;
+	// }
 
 	return (
 		<Layout>
@@ -45,7 +45,7 @@ export default function Home() {
 				posts
 					.slice(0)
 					.reverse()
-					.map((post) => <PostItem key={post._id} post={post} />)
+					.map((post) => <PostList key={post._id} post={post} />)
 			) : (
 				<Box sx={{ width: '100%', margin: 'auto', mt: 3 }}>
 					<Typography variant='subtitle1' component='div' textAlign='center'>
