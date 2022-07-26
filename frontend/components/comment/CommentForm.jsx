@@ -1,19 +1,18 @@
 import * as React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import CardHeader from '@mui/material/CardHeader';
-import { red } from '@mui/material/colors';
 import { useState } from 'react';
 import { createComment } from '../../src/features/comments/commentSlice';
-import { styled } from '@mui/material/styles';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import Box from '@mui/material/Box';
 
 export default function CommentForm(props) {
 	const dispatch = useDispatch();
+	const { user } = useSelector((state) => state.auth);
 
 	const [commentFormData, setCommentFormData] = useState({
 		postId: props.postData._id,
@@ -44,14 +43,15 @@ export default function CommentForm(props) {
 			});
 		}
 	};
-
+	console.log('test');
 	return (
 		<Box component='form' onSubmit={onFormSubmit} noValidate autoComplete='off'>
 			<CardHeader
 				avatar={
-					<Avatar sx={{ bgcolor: red[500], width: 30, height: 30, mt: -5 }}>
-						R
-					</Avatar>
+					<Avatar
+						src={user.photo && `/uploads/${user.photo}`}
+						sx={{ width: 30, height: 30, mt: -5 }}
+					/>
 				}
 				title={
 					<TextField

@@ -6,7 +6,6 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import { red } from '@mui/material/colors';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import CardActions from '@mui/material/CardActions';
 import Divider from '@mui/material/Divider';
@@ -108,7 +107,7 @@ export default function PostForm() {
 	};
 
 	return (
-		<Grid item xs={12} sm={6} md={12}>
+		<Grid item xs={12}>
 			<Card
 				sx={{
 					display: 'flex',
@@ -131,7 +130,10 @@ export default function PostForm() {
 				<Divider variant='middle' />
 				<CardHeader
 					avatar={
-						<Avatar sx={{ bgcolor: red[500], width: 50, height: 50 }}>R</Avatar>
+						<Avatar
+							src={user.photo && `/uploads/${user.photo}`}
+							sx={{ width: 50, height: 50 }}
+						/>
 					}
 					title={`${firstName} ${lastName}`}
 					action={
@@ -224,14 +226,14 @@ export default function PostForm() {
 								onChange={handlePhoto}
 							/>
 							<Button
-								variant='outlined'
+								variant='contained'
 								startIcon={<ImageOutlinedIcon />}
 								component='span'
 							>
 								Photo
 							</Button>
 						</label>
-						<Button variant='outlined' type='submit'>
+						<Button variant='contained' type='submit'>
 							Post
 						</Button>
 					</Stack>

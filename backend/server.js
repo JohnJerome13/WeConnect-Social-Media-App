@@ -5,6 +5,7 @@ const { errorHandler } = require('./middleware/errorMiddleware')
 const connectDB = require('./config/db')
 const cors = require('cors')
 const port = process.env.PORT || 5000
+const socket = require("socket.io");
 
 connectDB()
 
@@ -18,6 +19,8 @@ app.use(express.urlencoded({ extended: false }))
 app.use('/api/users', require('./routes/userRoutes'))
 app.use('/api/posts', require('./routes/postRoutes'))
 app.use('/api/comments', require('./routes/commentRoutes'))
+app.use('/api/friends', require('./routes/friendRoutes'))
+app.use('/api/messages', require('./routes/messageRoutes'))
 
 // Serve frontend
 if (process.env.NODE_ENV === 'production') {
@@ -34,4 +37,27 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(errorHandler)
 
-app.listen(port, () => console.log(`Server started on port ${port}`))
+const server = app.listen(port, () => console.log(`Server started on port ${port}`))
+
+
+const io = socket(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true,
+  },
+});
+
+global.onlineUsers = new Map();
+io.on("connection", (socket) => {
+  global.chatSocket = socket;
+  socket.on("add-user", (userId) => {
+    onlineUsers.set(userId, socket.id);
+  });
+
+  socket.on("send-msg", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to);
+    if (sendUserSocket) {
+      socket.to(sendUserSocket).emit("msg-recieve", data);
+    }
+  });
+});

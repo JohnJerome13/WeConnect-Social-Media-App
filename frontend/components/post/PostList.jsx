@@ -8,12 +8,9 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
-import { red } from '@mui/material/colors';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import TimeAgo from 'javascript-time-ago';
-import en from 'javascript-time-ago/locale/en.json';
 import CommentForm from '../comment/CommentForm';
 import CommentList from '../comment/CommentList';
 import MenuItems from '../features/MenuItems';
@@ -22,24 +19,21 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import RecommendIcon from '@mui/icons-material/Recommend';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
-import { getComments, reset } from '../../src/features/comments/commentSlice';
+import { getComments } from '../../src/features/comments/commentSlice';
 import LikesModal from '../like/LikesModal';
 import Box from '@mui/material/Box';
 import PublicIcon from '@mui/icons-material/Public';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
-
 import { likePost } from '../../src/features/posts/postSlice';
 import { Typography } from '@mui/material';
-
-TimeAgo.addDefaultLocale(en);
+import TimeDateAgo from '../features/TimeDateAgo';
+import UserNameLink from '../../components/features/UserNameLink';
 
 export default function PostList({ post }) {
 	const dispatch = useDispatch();
 	const { user } = useSelector((state) => state.auth);
-
-	const timeAgo = new TimeAgo('en-US');
 
 	const { comments } = useSelector((state) => state.comments);
 
@@ -58,10 +52,6 @@ export default function PostList({ post }) {
 		dispatch(getComments());
 
 		setCommentsItem(commentsInitialState);
-
-		// return () => {
-		// 	dispatch(reset());
-		// };
 	}, [dispatch, JSON.stringify(comments)]);
 
 	// Expand comments
@@ -152,7 +142,7 @@ export default function PostList({ post }) {
 		);
 	}
 	return (
-		<Grid item xs={12} sm={6} md={12}>
+		<Grid item xs={12}>
 			<Card
 				sx={{
 					display: 'flex',
@@ -164,15 +154,16 @@ export default function PostList({ post }) {
 			>
 				<CardHeader
 					avatar={
-						<Avatar sx={{ bgcolor: red[500] }} aria-label='avatar'>
-							R
-						</Avatar>
+						<Avatar
+							src={post.userData.photo && `/uploads/${post.userData.photo}`}
+							aria-label='avatar'
+						/>
 					}
 					action={<MenuItems componentType='post' componentData={post} />}
-					title={`${user.firstName} ${user.lastName}`}
+					title={<UserNameLink data={post.userData} />}
 					subheader={
 						<Stack direction='row' spacing={1} sx={{ mt: 0.4 }}>
-							<span>{timeAgo.format(new Date(post.createdAt))}</span>
+							<TimeDateAgo timeDate={post.createdAt} />
 							{audienceIcon}
 						</Stack>
 					}
@@ -203,7 +194,7 @@ export default function PostList({ post }) {
 										onClick={openLikesModal}
 										variant='body2'
 									>
-										{postLikes} Likes
+										{postLikes}
 									</Typography>
 								</Stack>
 							)}
@@ -218,6 +209,7 @@ export default function PostList({ post }) {
 							<LikesModal
 								likesModal={likesModal}
 								closeLikesModal={closeLikesModal}
+								postUserId={post.user}
 								likesUserId={post.likes.userId}
 							/>
 						</CardActions>

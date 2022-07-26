@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -10,18 +9,18 @@ import DialogContent from '@mui/material/DialogContent';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Avatar from '@mui/material/Avatar';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import userService from '../../src/features/users/usersService';
+import FriendOptions from '../friends/FriendOptions';
+import UserNameLink from '../../components/features/UserNameLink';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 	'& .MuiDialogContent-root': {
 		padding: theme.spacing(2),
-		width: 600,
 	},
 	'& .MuiDialogActions-root': {
 		padding: theme.spacing(1),
@@ -59,31 +58,34 @@ BootstrapDialogTitle.propTypes = {
 
 export default function LikesModal(props) {
 	const { user } = useSelector((state) => state.auth);
-
 	const [likesData, setLikesData] = useState([]);
 
+	// Get user details by _id
 	const getUserDetails = async () => {
-		props.likesUserId.map(async (userId) => {
-			const userData = await userService.getUserDataById(userId, user.token);
-			setLikesData([
-				{
-					userId: userData._id,
+		const userDataArray = await Promise.all(
+			props.likesUserId.map(async (userId) => {
+				var userData = await userService.getUserDataById(userId, user.token);
+				return {
+					_id: userData._id,
 					lastName: userData.lastName,
 					firstName: userData.firstName,
-				},
-			]);
-		});
+					photo: userData.photo,
+				};
+			})
+		);
+		setLikesData(userDataArray);
 	};
 
 	useEffect(() => {
 		getUserDetails();
-	}, [props.likesUserId]);
+	}, [props.likesModal]);
 
 	return (
 		<BootstrapDialog
 			onClose={props.closeLikesModal}
 			aria-labelledby='customized-dialog-title'
 			open={props.likesModal}
+			fullWidth
 		>
 			<BootstrapDialogTitle
 				id='customized-dialog-title'
@@ -91,39 +93,28 @@ export default function LikesModal(props) {
 			>
 				Likes
 			</BootstrapDialogTitle>
+
 			<DialogContent dividers>
 				<List dense sx={{ width: '100%', maxHeight: 350 }}>
 					{likesData.map((data) => {
-						const labelId = `checkbox-list-secondary-label-${data.userId}`;
+						const labelId = `checkbox-list-secondary-label-${data._id}`;
+
 						return (
-							<ListItem
-								key={data.userId}
-								secondaryAction={
-									data.userId !== user._id && (
-										<Button
-											variant='outlined'
-											startIcon={<PersonAddIcon />}
-											component='span'
-											sx={{ textTransform: 'capitalize' }}
-										>
-											Add Friend
-										</Button>
-									)
-								}
-								disablePadding
-							>
-								<ListItemButton>
-									<ListItemAvatar>
-										<Avatar
-											alt={`Avatar n°${data.userId + 1}`}
-											src={`/static/images/avatar/${data.userId + 1}.jpg`}
-										/>
-									</ListItemAvatar>
-									<ListItemText
-										id={labelId}
-										primary={`${data.firstName} ${data.lastName}`}
-									/>
-								</ListItemButton>
+							<ListItem key={data._id}>
+								<ListItemAvatar>
+									<Avatar src={data.photo && `/uploads/${data.photo}`} />
+								</ListItemAvatar>
+								<ListItemText
+									id={labelId}
+									primary={<UserNameLink data={data} />}
+								/>
+								<ListItemSecondaryAction>
+									{data._id !== user._id ? (
+										<FriendOptions userData={data} component='likesModal' />
+									) : (
+										' '
+									)}
+								</ListItemSecondaryAction>
 							</ListItem>
 						);
 					})}

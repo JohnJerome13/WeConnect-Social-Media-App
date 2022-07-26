@@ -1,79 +1,79 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/posts/'
+const API_URL = 'http://localhost:5000/api/posts/';
+
+const config = (token) => {
+	return {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	};
+};
 
 // Create new post
 const createPost = async (postData, token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-
-  const response = await axios.post(API_URL, postData, config)
-  return response.data
-}
+	const response = await axios.post(API_URL, postData, config(token));
+	return response.data;
+};
 
 // Get user posts
 const getPosts = async (token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
+	const response = await axios.get(API_URL, config(token));
 
-  const response = await axios.get(API_URL, config)
-
-  return response.data
-}
+	return response.data;
+};
 
 // Update post
 const updatePost = async (postId, postData, token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
-
-  const response = await axios.put(API_URL + postId, postData, config)
-  return response.data
-}
+	const response = await axios.put(API_URL + postId, postData, config(token));
+	return response.data;
+};
 
 // Delete user post
 const deletePost = async (postId, postPhoto, token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-    data: {
-      fileName: postPhoto
-    }
-  }
-  
-  const response = await axios.delete(API_URL + postId, config)
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+		data: {
+			fileName: postPhoto,
+		},
+	};
 
-  return response.data
-}
+	const response = await axios.delete(API_URL + postId, config);
+
+	return response.data;
+};
 
 // Like post
 const likePost = async (postId, postData, token) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  }
+	const response = await axios.put(
+		API_URL + postId + '/likes',
+		postData,
+		config(token)
+	);
 
-  const response = await axios.put(API_URL + postId + '/likes', postData, config)
+	return response.data;
+};
 
-  return response.data
-}
+// Save post
+const savePost = async (postId, postData, token) => {
+	const response = await axios.put(
+		API_URL + postId + '/saves',
+		postData,
+		config(token)
+	);
+
+	return response.data;
+};
 
 const postService = {
-  createPost,
-  getPosts,
-  updatePost,
-  deletePost,
-  likePost,
-}
+	createPost,
+	getPosts,
+	updatePost,
+	deletePost,
+	likePost,
+	savePost,
+};
 
-export default postService
+export default postService;

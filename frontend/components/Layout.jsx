@@ -1,23 +1,32 @@
 import * as React from 'react';
+import Box from '@mui/material/Box';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useRouter } from 'next/router';
 import CssBaseline from '@mui/material/CssBaseline';
-import Grid from '@mui/material/Grid';
-import Container from '@mui/material/Container';
-import Header from './Header';
-import { useSelector, useDispatch } from 'react-redux';
+import Drawer from './Drawer';
 
 export default function Layout(props) {
+	const router = useRouter();
+
 	const { user } = useSelector((state) => state.auth);
 
+	useEffect(() => {
+		if (!user) {
+			router.push('/');
+		}
+	}, [user]);
+
 	return (
-		<>
-			{user && <Header />}
-			<main>
-				<Container sx={{ py: 5 }} maxWidth='md'>
-					<Grid container spacing={4}>
-						{props.children}
-					</Grid>
-				</Container>
-			</main>
-		</>
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+			}}
+		>
+			<CssBaseline />
+
+			{user && <Drawer content={props.children} />}
+		</Box>
 	);
 }

@@ -8,6 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useDispatch } from 'react-redux';
 import { deletePost } from '../../src/features/posts/postSlice';
 import { deleteComment } from '../../src/features/comments/commentSlice';
+import { toast } from 'react-toastify';
 
 export default function DeleteDialog(props) {
 	const dispatch = useDispatch();
@@ -17,9 +18,11 @@ export default function DeleteDialog(props) {
 			var postId = props.componentData._id;
 			var postPhoto = props.componentData.photo;
 			dispatch(deletePost({ postId, postPhoto }));
+			toast.info('Post Deleted.');
 		} else if (props.componentType === 'comment') {
 			var commentId = props.componentData._id;
 			dispatch(deleteComment(commentId));
+			toast.info('Comment Deleted.');
 		}
 	};
 

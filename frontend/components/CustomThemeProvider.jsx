@@ -18,11 +18,11 @@ const darkTheme = createTheme({
 });
 
 export default function CustomThemeProvider({ children }) {
-	const { isLoading } = useSelector((state) => state.auth);
+	const { isLoading: isLoadingDarkMode } = useSelector((state) => state.auth);
 
 	var localIsDarkMode = JSON.parse(localStorage.getItem('isDarkMode'));
 
-	if (isLoading) {
+	if (isLoadingDarkMode) {
 		return <Spinner />;
 	}
 

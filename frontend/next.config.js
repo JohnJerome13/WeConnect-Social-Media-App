@@ -1,5 +1,5 @@
 module.exports = {
-  reactStrictMode: true,
+  // reactStrictMode: true,
   env: {
     PORT: 5000,
     JWT_SECRET: 'dwT36yef78j'
