@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:5000/api/messages/'
+const API_URL = '/api/messages/'
 
 const config = (token) => {
  return {
