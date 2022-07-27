@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = '/api/posts/';
+const API_URL = 'https://weconnect-mern-app.herokuapp.com/api/users/';
 
 const config = (token) => {
 	return {
