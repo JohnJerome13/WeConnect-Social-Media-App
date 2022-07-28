@@ -1,7 +1,6 @@
 {
 	"name": "nextjs",
 	"version": "5.0.0",
-	"proxy": "https://weconnect-mern-app.herokuapp.com/",
 	"private": true,
 	"scripts": {
 		"dev": "next dev",

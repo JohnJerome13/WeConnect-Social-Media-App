@@ -138,7 +138,11 @@ function ResponsiveDrawer(props) {
 				>
 					<Link href='/home' passHref>
 						<Box component='a' sx={{ display: { lg: 'none' } }}>
-							<img src={`/logo/favicon.png`} style={{ width: '100%' }} />
+							<img
+								src={`/logo/favicon.png`}
+								style={{ width: '100%' }}
+								alt='we-connect-logo'
+							/>
 						</Box>
 					</Link>
 					<Link href='/home' passHref>
@@ -192,8 +196,8 @@ function ResponsiveDrawer(props) {
 										? `/logo/weconnect-white.png`
 										: `/logo/weconnect-black.png`
 								}
-								loading='lazy'
 								style={{ width: '90%' }}
+								alt='we-connect-logo'
 							/>
 						</Box>
 					</Link>

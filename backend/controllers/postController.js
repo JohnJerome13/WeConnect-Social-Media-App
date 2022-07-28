@@ -51,7 +51,7 @@ const setPost = asyncHandler(async (req, res) => {
 		var fileName = `${uuidv4()}-${Date.now()}-${formatedName}`;
 
 		await sharp(req.file.buffer)
-			.resize({ width: 1080 })
+			.resize({ width: 720 })
 			.toFile(`frontend/public/uploads/${fileName}`);
 	}
 
@@ -105,7 +105,7 @@ const updatePost = asyncHandler(async (req, res) => {
 		const formatedName = req.file.originalname.split(' ').join('-');
 		var fileName = `${uuidv4()}-${Date.now()}-${formatedName}`;
 		await sharp(req.file.buffer)
-			.resize({ width: 1080 })
+			.resize({ width: 720 })
 			.toFile(`frontend/public/uploads/${fileName}`);
 	} else {
 		var fileName = req.body.photo;
