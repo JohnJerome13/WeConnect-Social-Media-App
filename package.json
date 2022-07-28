@@ -1,5 +1,5 @@
 {
-	"name": "social-media-app",
+	"name": "we-connect",
 	"version": "1.0.0",
 	"description": "Social media app for my portfolio.",
 	"main": "server.js",
@@ -7,7 +7,8 @@
 		"start": "node backend/server.js",
 		"server": "nodemon backend/server.js",
 		"client": "npm run dev --prefix frontend",
-		"dev": "concurrently \"npm run server\" \"npm run client\""
+		"dev": "concurrently \"npm run server\" \"npm run client\"",
+		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
 	},
 	"author": "John Jerome Perez",
 	"license": "MIT",
@@ -30,8 +31,7 @@
 		"concurrently": "^7.1.0",
 		"nodemon": "^2.0.19"
 	},
-	"cacheDirectories": [
-		"node_modules/",
-		".next/cache/"
-	]
+	"engines": {
+		"node": "14.15.1"
+	}
 }
