@@ -34,7 +34,7 @@ export default function MessagesId() {
 
 	useEffect(() => {
 		if (user) {
-			socket.current = io('http://localhost:5000');
+			socket.current = io('https://we-connect-social-media.herokuapp.com');
 			socket.current.emit('add-user', user._id);
 		}
 	}, [user]);

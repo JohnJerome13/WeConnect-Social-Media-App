@@ -43,7 +43,7 @@ const server = app.listen(port, () =>
 
 const io = socket(server, {
 	cors: {
-		origin: 'http://localhost:3000',
+		origin: 'https://we-connect-social-media.herokuapp.com',
 		credentials: true,
 	},
 });
