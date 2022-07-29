@@ -51,11 +51,13 @@ export default function SignIn() {
 		(state) => state.auth
 	);
 
-	var isUser = JSON.parse(localStorage.getItem('user'));
-
 	useEffect(() => {
 		if (isError) {
 			toast.error(message);
+		}
+
+		if (isSuccess || user) {
+			router.push('/home');
 		}
 
 		dispatch(reset());
@@ -84,138 +86,126 @@ export default function SignIn() {
 		return <Spinner />;
 	}
 
-	if (isUser) {
-		router.push('/home');
-	} else {
-		return (
-			<ThemeProvider theme={theme}>
-				<Grid container component='main' sx={{ height: '100vh' }}>
-					<CssBaseline />
-					<Grid
-						item
-						xs={false}
-						sm={4}
-						md={6}
+	return (
+		<ThemeProvider theme={theme}>
+			<Grid container component='main' sx={{ height: '100vh' }}>
+				<CssBaseline />
+				<Grid
+					item
+					xs={false}
+					sm={4}
+					md={6}
+					sx={{
+						backgroundImage: 'url(/images/undraw_community_re_cyrm.png)',
+						backgroundRepeat: 'no-repeat',
+						backgroundColor: (t) =>
+							t.palette.mode === 'light'
+								? t.palette.grey[50]
+								: t.palette.grey[900],
+						backgroundSize: 'contain',
+						backgroundPosition: 'center',
+					}}
+				/>
+				<Grid item xs={12} sm={7} md={4} component={Paper} elevation={6} square>
+					<Box
 						sx={{
-							backgroundImage: 'url(/images/undraw_community_re_cyrm.png)',
-							backgroundRepeat: 'no-repeat',
-							backgroundColor: (t) =>
-								t.palette.mode === 'light'
-									? t.palette.grey[50]
-									: t.palette.grey[900],
-							backgroundSize: 'contain',
-							backgroundPosition: 'center',
+							my: 8,
+							mx: 4,
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
 						}}
-					/>
-					<Grid
-						item
-						xs={12}
-						sm={7}
-						md={4}
-						component={Paper}
-						elevation={6}
-						square
 					>
-						<Box
+						<ImageList
 							sx={{
-								my: 8,
-								mx: 4,
-								display: 'flex',
-								flexDirection: 'column',
-								alignItems: 'center',
+								width: '70%',
+								height: '70%',
 							}}
 						>
-							<ImageList
-								sx={{
-									width: '70%',
-									height: '70%',
-								}}
-							>
-								<ImageListItem cols={12}>
-									<img src={`/logo/weconnect-black.png`} loading='lazy' />
-								</ImageListItem>
-							</ImageList>
-							<Typography component='h1' variant='h5'>
-								Sign in
-							</Typography>
-							<Box
-								component='form'
-								noValidate
-								onSubmit={handleSubmit}
-								sx={{ mt: 1 }}
-							>
-								<TextField
-									margin='normal'
-									required
-									fullWidth
-									id='email'
-									label='Email Address'
-									name='email'
-									autoComplete='email'
-									onChange={handleInputChange}
-									value={email}
-									autoFocus
-								/>
-								<TextField
-									margin='normal'
-									required
-									fullWidth
-									name='password'
-									label='Password'
-									type='password'
-									id='password'
-									autoComplete='current-password'
-									onChange={handleInputChange}
-									value={password}
-								/>
-								<FormControl fullWidth sx={{ mt: 2 }}>
-									<InputLabel id='simple-select-label'>Sample Users</InputLabel>
-									<Select
-										labelId='simple-select-label'
-										id='simple-select'
-										value={account}
-										label='Sample Users'
-										onChange={handleSelectChange}
-									>
-										{[1, 2, 3, 4, 5].map((num) => {
-											return (
-												<MenuItem key={num} value={num}>
-													User {`${num}`}
-												</MenuItem>
-											);
-										})}
-									</Select>
-								</FormControl>
-								<Button
-									type='submit'
-									fullWidth
-									variant='contained'
-									sx={{ mt: 3, mb: 2 }}
+							<ImageListItem cols={12}>
+								<img src={`/logo/weconnect-black.png`} loading='lazy' />
+							</ImageListItem>
+						</ImageList>
+						<Typography component='h1' variant='h5'>
+							Sign in
+						</Typography>
+						<Box
+							component='form'
+							noValidate
+							onSubmit={handleSubmit}
+							sx={{ mt: 1 }}
+						>
+							<TextField
+								margin='normal'
+								required
+								fullWidth
+								id='email'
+								label='Email Address'
+								name='email'
+								autoComplete='email'
+								onChange={handleInputChange}
+								value={email}
+								autoFocus
+							/>
+							<TextField
+								margin='normal'
+								required
+								fullWidth
+								name='password'
+								label='Password'
+								type='password'
+								id='password'
+								autoComplete='current-password'
+								onChange={handleInputChange}
+								value={password}
+							/>
+							<FormControl fullWidth sx={{ mt: 2 }}>
+								<InputLabel id='simple-select-label'>Sample Users</InputLabel>
+								<Select
+									labelId='simple-select-label'
+									id='simple-select'
+									value={account}
+									label='Sample Users'
+									onChange={handleSelectChange}
 								>
-									Sign In
-								</Button>
-								<Grid container>
-									<Grid item>
-										<Link href='/register' variant='body2'>
-											{"Don't have an account? Sign Up"}
-										</Link>
-									</Grid>
+									{[1, 2, 3, 4, 5].map((num) => {
+										return (
+											<MenuItem key={num} value={num}>
+												User {`${num}`}
+											</MenuItem>
+										);
+									})}
+								</Select>
+							</FormControl>
+							<Button
+								type='submit'
+								fullWidth
+								variant='contained'
+								sx={{ mt: 3, mb: 2 }}
+							>
+								Sign In
+							</Button>
+							<Grid container>
+								<Grid item>
+									<Link href='/register' variant='body2'>
+										{"Don't have an account? Sign Up"}
+									</Link>
 								</Grid>
-								<Copyright sx={{ mt: 5 }} />
-							</Box>
+							</Grid>
+							<Copyright sx={{ mt: 5 }} />
 						</Box>
-					</Grid>
-					<Grid
-						item
-						xs={false}
-						sm={1}
-						md={2}
-						sx={{
-							backgroundColor: 'primary.main',
-						}}
-					/>
+					</Box>
 				</Grid>
-			</ThemeProvider>
-		);
-	}
+				<Grid
+					item
+					xs={false}
+					sm={1}
+					md={2}
+					sx={{
+						backgroundColor: 'primary.main',
+					}}
+				/>
+			</Grid>
+		</ThemeProvider>
+	);
 }
