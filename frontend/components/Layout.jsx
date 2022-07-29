@@ -11,10 +11,12 @@ export default function Layout(props) {
 
 	const { user } = useSelector((state) => state.auth);
 
-	var isUser = JSON.parse(localStorage.getItem('user'));
+	if (typeof window !== 'undefined') {
+		var isUser = JSON.parse(localStorage.getItem('user'));
 
-	if (!isUser) {
-		router.push('/');
+		if (!isUser) {
+			router.push('/');
+		}
 	}
 
 	return (
