@@ -9,6 +9,7 @@ This is the  WeConnect social media app that I developed for my portfolio.
 * [![Next][Next.js]][Next-url]
 * [![React][React.js]][React-url]
 * [![Mui][Mui.com]][Mui-url]
+* [![Redux][Redux.com]][Redux-url]
 * [![Express][Express.com]][Express-url]
 * [![Nodejs][Nodejs.com]][Nodejs-url]
 * [![Mongodb][Mongodb.com]][Mongodb-url]
@@ -60,6 +61,8 @@ Inspiration, code snippets, etc.
 [React-url]: https://reactjs.org/
 [Mui.com]: https://img.shields.io/badge/-Material%20UI-%23007FFF?style=for-the-badge&logo=mui&logoColor=white
 [Mui-url]: https://mui.com
+[Redux.com]: https://img.shields.io/badge/-Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white
+[Redux-url]: [https://mui.com](https://react-redux.js.org/)
 [Express.com]: https://img.shields.io/badge/-Express.js-fff?style=for-the-badge&logo=express&logoColor=black
 [Express-url]: https://expressjs.com/
 [Nodejs.com]: https://img.shields.io/badge/-Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white
