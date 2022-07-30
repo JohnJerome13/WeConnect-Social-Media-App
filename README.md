@@ -1,46 +1,73 @@
-# Next.js example
+# WeConnect Social Media MERN app
 
-## How to use
+This is the  WeConnect social media app that I developed for my portfolio.
 
-Download the example [or clone the repo](https://github.com/mui/material-ui):
+[![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-<!-- #default-branch-switch -->
+## Built With
 
-```sh
-curl https://codeload.github.com/mui/material-ui/tar.gz/master | tar -xz --strip=2  material-ui-master/examples/nextjs
-cd nextjs
+* [![Next][Next.js]][Next-url]
+* [![React][React.js]][React-url]
+* [![Mui][Mui.com]][Mui-url]
+* [![Redux][Redux.com]][Redux-url]
+* [![Express][Express.com]][Express-url]
+* [![Nodejs][Nodejs.com]][Nodejs-url]
+* [![Mongodb][Mongodb.com]][Mongodb-url]
+
+
+
+## Usage
+
+Rename the .envexample to .env and add your MONGO_URI
+
+### Install dependencies
+
 ```
-
-Install it and run:
-
-```sh
+# Backend deps
 npm install
-npm run dev
+
+# Frontend deps
+cd frontend
+npm install
 ```
 
-or:
+### Run Server
 
-<!-- #default-branch-switch -->
+```
+npm run server
+```
 
-[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/nextjs)
+## Demo
 
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/mui/material-ui/tree/master/examples/nextjs)
+https://we-connect-social-media.herokuapp.com/
 
-## The idea behind the example
+## License
 
-The project uses [Next.js](https://github.com/vercel/next.js), which is a framework for server-rendered React apps.
-It includes `@mui/material` and its peer dependencies, including `emotion`, the default style engine in MUI v5.
-If you prefer, you can [use styled-components instead](https://mui.com/material-ui/guides/interoperability/#styled-components).
+Distributed under the MIT License. See `LICENSE.txt` for more information.
 
-## The link component
+## Acknowledgments
 
-Next.js has [a custom Link component](https://nextjs.org/docs/api-reference/next/link).
-The example folder provides adapters for usage with MUI.
-More information [in the documentation](https://mui.com/material-ui/guides/routing/#next-js).
+Inspiration, code snippets, etc.
+* [Traversy Media](https://www.traversymedia.com/)
+* [Scrimba](https://scrimba.com/)
 
-## What's next?
 
-<!-- #default-branch-switch -->
-
-You now have a working example project.
-You can head back to the documentation, continuing browsing it from the [templates](https://mui.com/material-ui/getting-started/templates/) section.
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[product-screenshot]: images/we-connect-sign-in-page.png
+[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
+[Next-url]: https://nextjs.org/
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Mui.com]: https://img.shields.io/badge/-Material%20UI-%23007FFF?style=for-the-badge&logo=mui&logoColor=white
+[Mui-url]: https://mui.com
+[Redux.com]: https://img.shields.io/badge/-Redux-764ABC?style=for-the-badge&logo=redux&logoColor=white
+[Redux-url]: [https://mui.com](https://react-redux.js.org/)
+[Express.com]: https://img.shields.io/badge/-Express.js-fff?style=for-the-badge&logo=express&logoColor=black
+[Express-url]: https://expressjs.com/
+[Nodejs.com]: https://img.shields.io/badge/-Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white
+[Nodejs-url]: https://nodejs.org/en/
+[Mongodb.com]: https://img.shields.io/badge/-MongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white
+[Mongodb-url]: https://www.mongodb.com/
+[Express.com]: https://img.shields.io/badge/-Express.js-fff?style=for-the-badge&logo=express&logoColor=black
+[Express-url]: https://expressjs.com/
