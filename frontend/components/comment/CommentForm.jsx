@@ -43,7 +43,7 @@ export default function CommentForm(props) {
 			});
 		}
 	};
-	console.log('test');
+
 	return (
 		<Box component='form' onSubmit={onFormSubmit} noValidate autoComplete='off'>
 			<CardHeader
