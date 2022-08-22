@@ -1,6 +1,6 @@
 # WeConnect Social Media MERN app
 
-This is the  WeConnect social media app that I developed for my portfolio.
+A simple social media application with functionalities of users, posts, likes, comments, private messages and friends.
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
