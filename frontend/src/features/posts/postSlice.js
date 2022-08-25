@@ -175,6 +175,7 @@ export const postSlice = createSlice({
 					if (post._id === action.payload._id) {
 						post.text = action.payload.text;
 						post.photo = action.payload.photo;
+						post.imageUrl = action.payload.imageUrl;
 						post.audience = action.payload.audience;
 					}
 					return post;

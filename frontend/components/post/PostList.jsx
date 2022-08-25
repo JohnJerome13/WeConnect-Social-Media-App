@@ -172,11 +172,7 @@ export default function PostList({ post }) {
 					<ReadMore>{post.text}</ReadMore>
 				</CardContent>
 				{post.photo && (
-					<CardMedia
-						component='img'
-						image={`/uploads/${post.photo}`}
-						alt={post.photo}
-					/>
+					<CardMedia component='img' image={post.imageUrl} alt={post.photo} />
 				)}
 				{(postLikes > 0 || commentNum > 0) && (
 					<>

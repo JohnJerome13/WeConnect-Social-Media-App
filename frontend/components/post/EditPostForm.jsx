@@ -76,7 +76,7 @@ export default function EditPost(props) {
 		postId: props.postData._id,
 		editText: props.postData.text,
 		editAudience: props.postData.audience,
-		editPhoto: props.postData.photo,
+		editPhoto: props.postData.imageUrl,
 	});
 
 	const { postId, editText, editAudience, editPhoto } = editPostData;
@@ -199,14 +199,7 @@ export default function EditPost(props) {
 						}}
 					>
 						<ImageListItem cols={12}>
-							<img
-								src={
-									editPhoto instanceof Blob
-										? editPhotoPreview
-										: `/uploads/${editPhotoPreview}`
-								}
-								loading='lazy'
-							/>
+							<img src={editPhotoPreview} loading='lazy' />
 							<ImageListItemBar
 								sx={{
 									background:

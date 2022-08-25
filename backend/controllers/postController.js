@@ -5,12 +5,12 @@ const User = require('../models/userModel');
 const { v4: uuidv4 } = require('uuid');
 const sharp = require('sharp');
 const fs = require('fs');
+const { uploadFile, deleteFile, getObjectSignedUrl } = require('../s3');
 
 // @desc    Get posts
 // @route   GET /api/posts
 // @access  Private
 const getPosts = asyncHandler(async (req, res) => {
-	await Post.find({ user: req.user.id });
 	Post.aggregate([
 		{
 			$lookup: {
@@ -21,19 +21,26 @@ const getPosts = asyncHandler(async (req, res) => {
 			},
 		},
 	]).exec(function (err, postData) {
-		var userPostData = postData.map((data) => {
-			return data.userData.map((obj) => ({
-				...data,
-				userData: {
-					_id: obj._id,
-					email: obj.email,
-					firstName: obj.firstName,
-					lastName: obj.lastName,
-					photo: obj.photo,
-				},
-			}));
-		});
-		res.status(200).json(userPostData.map((data) => data[0]));
+		(async () => {
+			const userPostData = await Promise.all(
+				postData.map(async (data) => {
+					const user = data.userData.map((obj) => ({
+						_id: obj._id,
+						email: obj.email,
+						firstName: obj.firstName,
+						lastName: obj.lastName,
+						photo: obj.photo,
+					}));
+					return {
+						...data,
+						imageUrl:
+							data.photo != null ? await getObjectSignedUrl(data.photo) : '',
+						userData: user[0],
+					};
+				})
+			);
+			res.status(200).json(userPostData);
+		})();
 	});
 });
 
@@ -47,12 +54,16 @@ const setPost = asyncHandler(async (req, res) => {
 	}
 
 	if (req.file) {
+		const file = req.file;
+
 		const formatedName = req.file.originalname.split(' ').join('-');
 		var fileName = `${uuidv4()}-${Date.now()}-${formatedName}`;
 
-		await sharp(req.file.buffer)
+		const fileBuffer = await sharp(req.file.buffer)
 			.resize({ width: 720 })
-			.toFile(`frontend/public/uploads/${fileName}`);
+			.toBuffer();
+
+		await uploadFile(fileBuffer, fileName, file.mimetype);
 	}
 
 	var post = await Post.create({
@@ -66,13 +77,16 @@ const setPost = asyncHandler(async (req, res) => {
 
 	post = {
 		...post._doc,
+		imageUrl: post._doc.photo != null ? await getObjectSignedUrl(post._doc.photo) : '',
 		userData: {
 			email: user.email,
 			firstName: user.firstName,
 			lastName: user.lastName,
 			photo: user.photo,
+			
 		},
 	};
+	console.log(post)
 
 	res.status(200).json(post);
 });
@@ -102,27 +116,32 @@ const updatePost = asyncHandler(async (req, res) => {
 
 	if (req.file) {
 		// Insert new file
+		const file = req.file;
 		const formatedName = req.file.originalname.split(' ').join('-');
 		var fileName = `${uuidv4()}-${Date.now()}-${formatedName}`;
-		await sharp(req.file.buffer)
-			.resize({ width: 720 })
-			.toFile(`frontend/public/uploads/${fileName}`);
+		const fileBuffer = await sharp(req.file.buffer).resize({ width: 720 }).toBuffer();
+		// .toFile(`frontend/public/uploads/${fileName}`);
+		await uploadFile(fileBuffer, fileName, file.mimetype);
+
 	} else {
 		var fileName = req.body.photo;
 	}
 
 	// Delete old file if replaced or removed
 	if (post.photo && post.photo !== req.body.photo) {
-		fs.unlink(`frontend/public/uploads/${post.photo}`, function (err) {
-			if (err) {
-				throw err;
-			} else {
-				console.log('Successfully deleted the old file.');
-			}
-		});
+		// fs.unlink(`frontend/public/uploads/${post.photo}`, function (err) {
+		// 	if (err) {
+		// 		throw err;
+		// 	} else {
+		// 		console.log('Successfully deleted the old file.');
+		// 	}
+		// });
+
+		await deleteFile(post.photo)
+
 	}
 
-	const updatedPost = await Post.findByIdAndUpdate(
+	var updatedPost = await Post.findByIdAndUpdate(
 		req.params.id,
 		{
 			text: req.body.text,
@@ -134,6 +153,11 @@ const updatePost = asyncHandler(async (req, res) => {
 		}
 	);
 
+	updatedPost = {
+		...updatedPost._doc,
+		imageUrl: updatedPost._doc.photo != null ? await getObjectSignedUrl(updatedPost._doc.photo) : '',
+	};
+	console.log(updatedPost)
 	res.status(200).json(updatedPost);
 });
 
@@ -163,13 +187,14 @@ const deletePost = asyncHandler(async (req, res) => {
 	}
 
 	if (post.photo) {
-		fs.unlink(`frontend/public/uploads/${post.photo}`, function (err) {
-			if (err) {
-				throw err;
-			} else {
-				console.log('Successfully deleted the file.');
-			}
-		});
+		// fs.unlink(`frontend/public/uploads/${post.photo}`, function (err) {
+		// 	if (err) {
+		// 		throw err;
+		// 	} else {
+		// 		console.log('Successfully deleted the file.');
+		// 	}
+		// });
+		await deleteFile(post.photo)
 	}
 
 	await post.remove();
