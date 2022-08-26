@@ -25,6 +25,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import CardHeader from '@mui/material/CardHeader';
+import Box from '@mui/material/Box';
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 	'& .MuiDialogContent-root': {
@@ -140,116 +141,120 @@ export default function EditPost(props) {
 			onClose={props.toggleEditPostModal}
 			aria-labelledby='customized-dialog-title'
 			open={props.editPostForm}
-			component='form'
-			onSubmit={onEditFormSubmit}
-			encType='multipart/form-data'
-			noValidate
 			fullWidth
 		>
-			<BootstrapDialogTitle
-				id='customized-dialog-title'
-				onClose={props.toggleEditPostModal}
+			<Box
+				component='form'
+				onSubmit={onEditFormSubmit}
+				encType='multipart/form-data'
+				noValidate
+				autoComplete='off'
 			>
-				Edit Post
-			</BootstrapDialogTitle>
-			<DialogContent dividers>
-				<CardHeader
-					avatar={<Avatar src={user.photo && `/uploads/${user.photo}`} />}
-					title={`${user.firstName} ${user.lastName}`}
-					action={
-						<FormControl
-							variant='standard'
-							sx={{ minWidth: 90, mr: 1 }}
-							size='small'
-						>
-							<InputLabel id='demo-select-small'>Audience</InputLabel>
-							<Select
-								labelId='demo-select-small'
-								id='demo-select-small'
-								value={editAudience}
-								label='Audience'
-								onChange={handleAudienceChange}
+				<BootstrapDialogTitle
+					id='customized-dialog-title'
+					onClose={props.toggleEditPostModal}
+				>
+					Edit Post
+				</BootstrapDialogTitle>
+				<DialogContent dividers>
+					<CardHeader
+						avatar={<Avatar src={user.photo && `/uploads/${user.photo}`} />}
+						title={`${user.firstName} ${user.lastName}`}
+						action={
+							<FormControl
+								variant='standard'
+								sx={{ minWidth: 90, mr: 1 }}
+								size='small'
 							>
-								<MenuItem value='Friends' select='true'>
-									Friends
-								</MenuItem>
-								<MenuItem value='Public'>Public</MenuItem>
-							</Select>
-						</FormControl>
-					}
-					sx={{ p: 0, mb: 1.5 }}
-				/>
+								<InputLabel id='demo-select-small'>Audience</InputLabel>
+								<Select
+									labelId='demo-select-small'
+									id='demo-select-small'
+									value={editAudience}
+									label='Audience'
+									onChange={handleAudienceChange}
+								>
+									<MenuItem value='Friends' select='true'>
+										Friends
+									</MenuItem>
+									<MenuItem value='Public'>Public</MenuItem>
+								</Select>
+							</FormControl>
+						}
+						sx={{ p: 0, mb: 1.5 }}
+					/>
 
-				<TextField
-					autoFocus
-					name='editText'
-					label='Write something here...'
-					variant='standard'
-					rows={5}
-					onChange={handleEditInputChange}
-					value={editText}
-					fullWidth
-					multiline
-				/>
-				{editPhoto && (
-					<ImageList
-						sx={{
-							width: '100%',
-							height: '100%',
-						}}
-					>
-						<ImageListItem cols={12}>
-							<img src={editPhotoPreview} loading='lazy' />
-							<ImageListItemBar
-								sx={{
-									background:
-										'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-										'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-								}}
-								position='top'
-								actionIcon={
-									<IconButton
-										sx={{ color: 'white', p: 2 }}
-										aria-label={`cancel`}
-										onClick={handleEditChangePreview}
-									>
-										<CancelIcon />
-									</IconButton>
-								}
-								actionPosition='right'
-							/>
-						</ImageListItem>
-					</ImageList>
-				)}
-			</DialogContent>
-			<DialogActions
-				sx={{
-					m: 1,
-				}}
-				disableSpacing
-			>
-				<Stack spacing={2} direction='row'>
-					<label htmlFor='update-photo-image'>
-						<Input
-							accept='image/*'
-							id='update-photo-image'
-							type='file'
-							name='editPhoto'
-							onChange={handleEditPhoto}
-						/>
-						<Button
-							variant='contained'
-							startIcon={<ImageOutlinedIcon />}
-							component='span'
+					<TextField
+						autoFocus
+						name='editText'
+						label='Write something here...'
+						variant='standard'
+						rows={5}
+						onChange={handleEditInputChange}
+						value={editText}
+						fullWidth
+						multiline
+					/>
+					{editPhoto && (
+						<ImageList
+							sx={{
+								width: '100%',
+								height: '100%',
+							}}
 						>
-							Photo
+							<ImageListItem cols={12}>
+								<img src={editPhotoPreview} loading='lazy' />
+								<ImageListItemBar
+									sx={{
+										background:
+											'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
+											'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+									}}
+									position='top'
+									actionIcon={
+										<IconButton
+											sx={{ color: 'white', p: 2 }}
+											aria-label={`cancel`}
+											onClick={handleEditChangePreview}
+										>
+											<CancelIcon />
+										</IconButton>
+									}
+									actionPosition='right'
+								/>
+							</ImageListItem>
+						</ImageList>
+					)}
+				</DialogContent>
+				<DialogActions
+					sx={{
+						m: 1,
+					}}
+					disableSpacing
+				>
+					<Stack spacing={2} direction='row'>
+						<label htmlFor='update-photo-image'>
+							<Input
+								accept='image/*'
+								id='update-photo-image'
+								type='file'
+								name='editPhoto'
+								onChange={handleEditPhoto}
+							/>
+							<Button
+								variant='contained'
+								startIcon={<ImageOutlinedIcon />}
+								component='span'
+							>
+								Photo
+							</Button>
+						</label>
+						<Button variant='contained' type='submit'>
+							Update
 						</Button>
-					</label>
-					<Button variant='contained' type='submit'>
-						Update
-					</Button>
-				</Stack>
-			</DialogActions>
+					</Stack>
+				</DialogActions>
+			</Box>
 		</BootstrapDialog>
 	);
 }
