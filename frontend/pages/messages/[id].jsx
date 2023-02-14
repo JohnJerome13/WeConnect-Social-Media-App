@@ -9,7 +9,6 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import messageService from '../../src/features/messages/messageService';
-import { io } from 'socket.io-client';
 
 MessagesId.title = 'WeConnect - Messages';
 
@@ -31,13 +30,6 @@ export default function MessagesId() {
 	useEffect(() => {
 		id && getMessages();
 	}, [id]);
-
-	useEffect(() => {
-		if (user) {
-			socket.current = io('https://we-connect-social-media.herokuapp.com');
-			socket.current.emit('add-user', user._id);
-		}
-	}, [user]);
 
 	return (
 		<Layout>
